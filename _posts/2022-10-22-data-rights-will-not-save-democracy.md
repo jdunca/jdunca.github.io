@@ -1,7 +1,7 @@
 ---
 title: Data rights will not save democracy
 authors: [jamie_duncan, wendy_wong]
-categories: [Opinion]
+categories: [Opinion, Media]
 date: 2022-10-22 
 ---
 This opinion piece originally appeared in the [Globe and Mail](https://www.theglobeandmail.com/opinion/article-data-rights-will-not-save-democracy/).
