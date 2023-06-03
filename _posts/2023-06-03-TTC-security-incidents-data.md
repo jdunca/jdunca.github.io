@@ -11,7 +11,7 @@ Oliver Moore and Sun Yang used this data for their story, ["Assaults are up on T
 
 The text of my original request asked for: "any statistics available regarding the prevalence of security incidents and violent crime on TTC vehicles and within TTC stations extending as far back as 2000. Please include all relevant metadata including dates, type of incident, location, and any other relevant information associated with these records." I filed this request on a bit of a whim so it wasn't the most carefully crafted FOI I've ever drafted. I followed up to clarify with the coordinator that I wanted this data in tabular format.
 
-The dataset released spans from 2002 to February of 2023 and includes deatils on the time and place of an incident, an 'offence type' and notes from the report. I think these notes would make for an interesting text-as-data project. Here is a glimpse at the data as it was released:
+The dataset released spans from 2002 to February of 2023 and includes details on the time and place of an incident, an 'offence type' and notes from the report. I think these notes would make for an interesting text-as-data project. Here is a glimpse at the data as it was released:
 
 ```
 Rows: 50,534
@@ -23,7 +23,7 @@ $ `Offence Type` <chr> "MISCHIEF", "ASSAULT", "MISCHIEF", "ASSAULT", "MISCHIEF",
 $ Notes          <chr> "RACIALLY MOTIVATED GRAFFITI IN BLACK MARKER.  INSIDE PANEL OF STALL DOOR ON FIRST TOILET STALL.  \"ALL BLACK MALES AR…
 ```
 
-I hope that others can make use of this data to conduct further evidence-based analyses of the problem of violence and other security incidents in Toronto. With that in mind, I want to reflect a bit on the kind of insights this kind of data can inform, as well as some of the limitationd inherent to government records like this.
+I hope that others can use this data to conduct further evidence-based analyses of the problems of violence and other security incidents on the TTC. With that in mind, I want to reflect a bit on the kind of insights this kind of data can inform, as well as some of the limitations inherent to government records like this.
 
 1. This data was extracted from the TTC's databases, likely by an analyst using SQL queries. The quality of this data is linked to the quality of the query used to pull it. There are several thousand duplicated rows, which indicates *something* weird was happening when this data was pulled. 
 2. This data is not a direct measure of crime. It is a measure of 'security incidents' as defined by the TTC and reported by TTC operators and TTC riders.
