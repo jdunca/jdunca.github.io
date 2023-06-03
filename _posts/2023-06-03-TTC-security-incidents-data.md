@@ -1,5 +1,5 @@
 ---
-title: "Archived data about security incidents on the TTC"
+title: "TTC security incidents dataset"
 author: jamie_duncan
 date: 2023-06-03
 tags: [media, data]
