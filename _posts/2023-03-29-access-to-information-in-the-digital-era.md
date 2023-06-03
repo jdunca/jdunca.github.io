@@ -2,7 +2,7 @@
 title: Access to information research in the digital era
 date: 2023-03-29
 authors: [alex_luscombe, jamie_duncan]
-categories: [Research]
+tags: [research]
 ---
 
 > Luscombe, Alex, and Duncan, Jamie. 2023. “Access to Information Research in the Digital Era.” Canadian Public Administration. 1–9. [https://doi.org/10.1111/capa.12518](https://doi.org/10.1111/capa.12518)

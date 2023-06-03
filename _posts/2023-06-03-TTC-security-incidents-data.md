@@ -2,7 +2,7 @@
 title: "Archived data about security incidents on the TTC"
 author: jamie_duncan
 date: 2023-06-03
-catgories: [Data]
+tags: [media, data]
 ---
 
 Violence on public transit has been attracting a lot of media attention in recent days. Toronto, where I live is no exception. After seeing several sensational headlines and a bunch of stories relying on top-line statistics from the Toronto Transit Commission (TTC), I found myself wondering what the TTC's data actually looks like. So I submitted a Freedom of Information Request for it. I'm used to waiting a long time so I was impressed when 50,000-ish rows of data came back in just under two months.
