@@ -11,6 +11,7 @@ order: 2
 - Jamie Duncan and Kevin Walby (2021). Police union political communications in Canada. *British Journal of Criminology*. [https://doi.org/10.1093/bjc/azab043](https://doi.org/10.1093/bjc/azab043)
 
 ## In the news
-- Contributed files to: Moore, O. & Sun, Y. (2023). "Assaults are up on TTC, but rising ridership reduces risk" The Globe and Mail. [https://www.theglobeandmail.com/canada/article-ttc-violence-rates/](https://www.theglobeandmail.com/canada/article-ttc-violence-rates/)
+- Contributed files to: Moore, O. & Sun, Y. (2023). "Assaults are up on TTC, but rising ridership reduces risk," The Globe and Mail. [https://www.theglobeandmail.com/canada/article-ttc-violence-rates/](https://www.theglobeandmail.com/canada/article-ttc-violence-rates/)
+- Featured in: Barreto, D. (2023). "Access denied - Tech at the border," Rights back at you (podcast), Amnesty International Canada. [https://amnesty.ca/podcast-access-denied-tech-at-the-border/](https://amnesty.ca/podcast-access-denied-tech-at-the-border/)
 - Quoted in: Wilt, J. (2022). “The myth of police as ‘embattled heroes’” Briarpatch Magazine. [https://briarpatchmagazine.com/articles/view/](https://briarpatchmagazine.com/articles/view/)the-myth-of-police-as-embattled-heroes)
 - Quoted in: Thorpe, Ryan (2021). “Disquieting trend: The Winnipeg Police Service’s public information office is larger than ever, but it’s providing less information, raising safety concerns and questions about transparency,” The Winnipeg Free Press. [https://www.winnipegfreepress.com/local/silent-terror-disquiet-on-the-warning-front-575386942.html](https://www.winnipegfreepress.com/local/silent-terror-disquiet-on-the-warning-front-575386942.html)
