@@ -2,7 +2,7 @@
 title: Facebook’s metaverse won’t be bound by physical borders – neither are human rights
 authors: [wendy_wong, jamie_duncan]
 date: 2021-11-05
-categories: [Opinion, Media]
+categories: [Media, Opinion]
 ---
 This opinion piece originally appeared in [*The Globe and Mail*](https://www.theglobeandmail.com/opinion/article-facebooks-metaverse-wont-be-bound-by-physical-borders-neither-are/).
 
