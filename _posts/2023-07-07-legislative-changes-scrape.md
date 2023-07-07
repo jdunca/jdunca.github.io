@@ -1,5 +1,5 @@
 ---
-title: Analysing legislative changes – Scraping versions of legislation
+title: Scraping legislation to analyse changes over time
 author: jamie_duncan
 date: 2023-07-07
 tags: [methods, data]
