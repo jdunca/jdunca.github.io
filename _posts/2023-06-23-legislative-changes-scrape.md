@@ -1,5 +1,5 @@
 ---
-title: Analysing legislative changes part 1 – Scraping versions of legislation
+title: Analysing legislative changes – Scraping versions of legislation
 author: jamie_duncan
 date: 2023-07-07
 tags: [methods, data]
@@ -27,14 +27,13 @@ ua <-  user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.
 Now we are ready to begin scraping. We can use our URL with the links to conduct what is called an index scrape. This just means we are collecting a list of URLs that point to the content that we are really after – text from different versions of the IRPA.
 
 ```R
-
 #this is our the url with the list
 url <- "https://laws.justice.gc.ca/eng/acts/i-2.5/PITIndex.html"
 ```
 Before we can extract our index from this URL, we need to figure out how the links to our content are embedded in the website. We just navigate to the url by pasting it into an internet browser or using `browseURL(url)` in our R console. We will use a browser plug in called [Selector Gadget](https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb) to select parts of the site we are interested in. There is a full tutorial on [SelectorGadget.com](https://selectorgadget.com/) but our use case is pretty straight forward. We just click on elements until the parts we want are highlighted in green or yellow. Parts we don't want should be highlighted in red or not at all. Once satisfied with our selection, we copy the CSS selectors indicated in the bar on the bottom right of the page. In this case we want HTML nodes labelled as `.col-md-push-3 a`.
 
 ![Screenshot of Selector Gadget on the index URL]({% link assets/images/selector-gadget.png%})
-
+_This screenshot shows what it will look like with all of the appropriate links selected._
 
 Now we are ready to scrape! The code chunk below uses the rvest package to read the HTML at our URL, select the parts we chose using Selector Gadget, and extract the embedded links. Because the links point to different parts of the same website, they only return the end of the URL. We need to complete the URLs by adding `https://laws.justice.gc.ca/eng/acts/i-2.5/` to the start of them. 
 
@@ -43,7 +42,6 @@ index <- read_html(session(url, ua)) |> #reads the HTML from the URL
   html_nodes(".col-md-push-3 a") |> #selects parts labeled with the CSS tag we identified with selector gadget
   html_attr("href") |> #extracts the 'href' HTML attribute (which means embedded URLS!)
   map_chr(\(x){paste0("https://laws.justice.gc.ca/eng/acts/i-2.5/", x)}) #complete the URLs
-
 ```
 After we run this code, we should end up with an index – a list of URLS in our R environment. We can test that this worked by visiting some of the pages. For example `browseURL(index[10])` for the 10th URL in our list. Once satisfied, we can begin to scrape the text. The code chunk below is even simpler than our index scrape. We read the HTML for each URL in the index and extract the text from it. We end up with 43 character strings in an element called `text`, each containing a different version of the IRPA.
 
@@ -71,9 +69,6 @@ name <- tibble(text = text, index = index) |> # create a table with text and ind
 
 Now we will use this table to help us write each version of the legislation to its own text file. As text data can take up quite a bit of memory, it is good practice to clear your environment periodically. Now that we have a fresh start, we read in the table we create in the previous step, select the text and name columns, and then write each row of the table to individual .txt files. The text column is the content of each file and the name column is the file name.
 
-> Your working directory needs to have a sub-directory called 'corpus' for this code to run.
-{: .prompt-warning }
-
 ```R
 rm(list = ls()) #clear the environment
 
@@ -81,6 +76,8 @@ read_csv("data/ca-irpa-versions.csv") |> #
   select(text, name) |> #select just the text and the file name
   pwalk(~ write_lines(x = .x, file = .y)) #along the text variable (.x), write the text to a file named according to the name variable (.y)
 ```
+> Your working directory needs to have a sub-directory called 'corpus' for this code to run.
+{: .prompt-warning }
 
 # Conclusion
 This is where we will end with Part 1. If you followed along with this post you should now have:
@@ -88,4 +85,3 @@ This is where we will end with Part 1. If you followed along with this post you 
 2. A folder called 'corpus' (or whatever else you decided to call it) with a .txt file for each version of the IRPA
 
 In Part 2, we will use these files to begin analyzing how the IRPA has changed in the 2 decades since it was passed into law.
-
