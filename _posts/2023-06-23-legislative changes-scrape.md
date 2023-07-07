@@ -34,7 +34,7 @@ url <- "https://laws.justice.gc.ca/eng/acts/i-2.5/PITIndex.html"
 ```
 Before we can extract our index from this URL, we need to figure out how the links to our content are embedded in the website. We just navigate to the url by pasting it into an internet browser or using `browseURL(url)` in our R console. We will use a browser plug in called [Selector Gadget](https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb) to select parts of the site we are interested in. There is a full tutorial on [SelectorGadget.com](https://selectorgadget.com/) but our use case is pretty straight forward. We just click on elements until the parts we want are highlighted in green or yellow. Parts we don't want should be highlighted in red or not at all. Once satisfied with our selection, we copy the CSS selectors indicated in the bar on the bottom right of the page. In this case we want HTML nodes labelled as `.col-md-push-3 a`.
 
-![Screenshot of Selector Gadget on the index URL](./assets/img/selector-gadget.png)
+![Screenshot of Selector Gadget on the index URL](jdunca.github.io/assets/images/selector-gadget.png)
 
 
 Now we are ready to scrape! The code chunk below uses the rvest package to read the HTML at our URL, select the parts we chose using Selector Gadget, and extract the embedded links. Because the links point to different parts of the same website, they only return the end of the URL. We need to complete the URLs by adding `https://laws.justice.gc.ca/eng/acts/i-2.5/` to the start of them. 
