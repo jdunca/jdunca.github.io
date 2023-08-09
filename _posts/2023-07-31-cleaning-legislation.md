@@ -28,13 +28,12 @@ We investigate these questions in a couple of ways. First, we can create a .txt 
 
 The screenshot below shows us the first several lines of the Immigration Act and we can see right away that the text of the law (which begins with the line "An Act...") is accompanied by supplementary notes about amendments contained in the box with the heading "Modifications etc.". We can note, for example that many of the lines in the box start with 'C' followed by a number. We can also see that each line begins with "Act" followed by one of several verbs like "amended" or "modified". Many of these lines include references to other laws using a codified shorthand with repeated patterns like "c." and a number ("c. 33"), references to a section ("s. 59"), sections ("ss. 69") or schedule ("Sch. 2"). A quick search using Ctrl-F reveals this shorthand only appears in the boxes with notes, while the text of the legislation will spell out 'section' or 'schedule' when referring to these things. We will keep these notes in mind.
 
-![Legislation screen shot](% link assets/images/uk-immigration-act.png%)
+![Legislation screen shot]({% link assets/images/uk-immigration-act.png%})
 _This screenshot shows the first lines of the most recent version of the UK's Immigration Act 1971 with LOTS of text that we don't want or need for our analysis._
 
 Despite discovering a really useful set of patterns in the text of the most recent version of the legislation, there is no guarantee these patterns will hold in older versions. Let's go to the opposite extreme and look at the oldest version we have. Again we can write a .txt file to look at the raw text we scraped using this line: `uk$text[1] |> write_lines('uk1.txt')`. We can also look at the first web version of the law from 2000.
 
-![Legislation screenshot](% link assets/images/uk-imm-act-valid-from.png%)
-_This screenshot of the earliest piece of legislation in our series reveals additional editorial notes that we don't need._
+![Legislation screenshot]({% link assets/images/uk-imm-act-valid-from.png%})_This screenshot of the earliest piece of legislation in our series reveals additional editorial notes that we don't need._
 
 Looking at the published version from February 14th 2000 reveals additional editorial content that we need to remove. First, we see that amendments are referenced in the text using square brackets – this appears in all versions of the legislation but I'm noting it here because it appears in this screen shot. What isn't in the latest version is the box that shows future amendments. In this case we have a box that starts with "VALID FROM" followed by a date in DD/MM/YYYY format. It ends with the standard notation for the textual amendment we already identified. Another quick search using Ctrl-F shows that this pattern holds for all of these boxes.
 
@@ -62,8 +61,7 @@ Basically, this regular expression will find and match the sequence "Valid from"
 
 The second step uses a 'for loop' to iterate over each version of legislation, transforming each version into a tibble (a spreadsheet or table) with a row for every line in the text of the legislation.
 
-> Many experienced R programmers dislike 'for loops'. Their reservations are generally well founded. For loops are computationally inefficient and less legible than 'vectorized' approaches like `purrr::map()`, especially for more complex tasks. For our purposes the task is small and simple enough that a for loop is fine.
-{: .prompt-tip }
+> Many experienced R programmers dislike 'for loops'. Their reservations are generally well founded. For loops are computationally inefficient and less legible than 'vectorized' approaches like `purrr::map()`, especially for more complex tasks. For our purposes the task is small and simple enough that a for loop is fine.{: .prompt-tip }
 
  ```R
  for(i in 1:length(uk$name)){ #for each version in the UK tibble
