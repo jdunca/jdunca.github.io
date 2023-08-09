@@ -104,6 +104,3 @@ It then uses `dplyr::mutate()` to modify and remove specific text from the rows 
 We remove the last two lines with `head(-2)` – extraneous formatting from the UK's legislation website. Finally, we use `write_delim()` to put each row in the tibble into a line in a .txt file written to the local path in our original .csv file. The final part of our for loop prints the name of the file that has just been processed so if there is an error we can see which file cause the problem. 
 # Conclusion
 This is where we'll stop with part 2 of this series on analyzing legislation across multiple versions. If you followed along with this post, you should have a folder of .txt files containing the cleaned text of each version. The future posts we will be able to read in these texts into a corpus that we can pre-process and apply various computational methods to.
-
-
-
