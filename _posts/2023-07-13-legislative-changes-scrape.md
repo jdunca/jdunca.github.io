@@ -8,7 +8,7 @@ tags: [methods, data]
 # Introduction
 Laws change over time. Governments frequently amend legislation and it can be hard to keep track of what has changed and when. The current verison of a given law shows traces of these changes, for example by mentioning how certain sections of other legislation have been repealed or amended by it. But it's often hard to figure out how the substance of what has changed about a given law and when that change was made.
 
-This blog post is Part 1 in a series of posts describing how to analyze the evolution of laws over time. It describes one way to use basic webscraping techniques to collect different versions of the same law. It uses Canada's Immigration and Refugee Protection Act (IRPA) 2002 as an example. The post assumes that users have a basic functional knowlege of the `R` programming language as well as a high level understanding of `HTML` and `CSS` (mostly just a loose understanding of what they are)
+This is part 1 in a series of posts describing how to analyze the evolution of laws over time. It describes one way to use basic webscraping techniques to collect different versions of the same law. It uses Canada's Immigration and Refugee Protection Act (IRPA) 2002 as an example. The post assumes that users have a basic functional knowlege of the `R` programming language as well as a high level understanding of `HTML` and `CSS` (mostly just a loose understanding of what they are).
 
 # Scraping historical versions of legislation
 The first thing we will do is find a way to efficiently collect different versions of the legislation across time. Thankfully these legislative 'snapshots' are easy to find on Canada's [Justice Laws Website](https://laws-lois.justice.gc.ca/eng/). Other countries like the UK and Australia also publish historical versions of legislation. All historical versions of the IRPA are conveniently linked at this URL: [https://laws.justice.gc.ca/eng/acts/i-2.5/PITIndex.html](https://laws.justice.gc.ca/eng/acts/i-2.5/PITIndex.html).
@@ -60,10 +60,11 @@ First, we create a table with columns for our text and the index URL that we too
 ```R
 name <- tibble(text = text, index = index) |> # create a table with text and index as columns
   mutate(date = as.Date(str_extract(text, "(?<=document from ).+(?= to)"), "%Y-%m-%d"), # create a date variable by extracting and formatting the start date date from the text 
-         name = paste0("corpus/ca-irpa-", date, ".txt")) |> #create file names
+         name = paste0("corpus/ca-irpa-", date, ".txt"), #create file names
+         doc_id = row_number()) |> #assign the rownumber as a unique doc_id
   write_csv("data/ca-irpa-versions.csv") #write to a .csv
 ```
-> Your working directory needs to have a sub-directory called 'data' for this code to run.
+> You need to create a sub-directory called 'data' within the working directory for this code to run.
 {: .prompt-warning }
 
 
@@ -76,7 +77,7 @@ read_csv("data/ca-irpa-versions.csv") |> #
   select(text, name) |> #select just the text and the file name
   pwalk(~ write_lines(x = .x, file = .y)) #along the text variable (.x), write the text to a file named according to the name variable (.y)
 ```
-> Your working directory needs to have a sub-directory called 'corpus' for this code to run.
+> You need to create a sub-directory called 'corpus' within the working directory for this code to run.
 {: .prompt-warning }
 
 # Conclusion
