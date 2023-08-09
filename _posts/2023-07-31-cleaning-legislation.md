@@ -62,7 +62,7 @@ Basically, this regular expression will find and match the sequence "Valid from"
 The second step uses a 'for loop' to iterate over each version of legislation, transforming each version into a tibble (a spreadsheet or table) with a row for every line in the text of the legislation.
 
 > Many experienced R programmers dislike 'for loops'. Their reservations are generally well founded. For loops are computationally inefficient and less legible than 'vectorized' approaches like `purrr::map()`, especially for more complex tasks. For our purposes the task is small and simple enough that a for loop is fine.
-{: .prompt-warning }
+{: .prompt-info }
 
  ```R
  for(i in 1:length(uk$name)){ #for each version in the UK tibble
