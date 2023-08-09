@@ -94,12 +94,14 @@ The code works as follows: The loop iterates over each file name in the `uk` dat
 - Rows that indicate text that has been repealed, which is indicated by a series of periods separated by spaces.
 - Rows that start with specific letter numbers followed by numbers (e.g., "C1", "I18", etc.).
 - Rows containing terms such as "Textual Amendments", "Modifications etc", that appear as headers in editorial notations.
+
 It then uses `dplyr::mutate()` to modify and remove specific text from the rows as well, in:
 - Removing patterns that point to footnotes or references, such as `[F1]` or `F1[`.
 - Replacing closing brackets (`]`) with spaces.
 - Removing certain patterns and abbreviations like "U.K.", which appears throughout the scraped content as a 'tag'.
 - Removing extra spaces to ensure that there's only one space between words.
-`head(-2)` removes the last two lines – extraneous formatting from the UK's legislation website before using `write_delim()` to put each row in the tibble into a line in a .txt file written to the local path in our original .csv file. The final part of our for loop prints the name of the file that has just been processed so if there is an error we can see which file cause the problem. 
+
+We remove the last two lines with `head(-2)` – extraneous formatting from the UK's legislation website. Finally, we use `write_delim()` to put each row in the tibble into a line in a .txt file written to the local path in our original .csv file. The final part of our for loop prints the name of the file that has just been processed so if there is an error we can see which file cause the problem. 
 # Conclusion
 This is where we'll stop with part 2 of this series on analyzing legislation across multiple versions. If you followed along with this post, you should have a folder of .txt files containing the cleaned text of each version. The future posts we will be able to read in these texts into a corpus that we can pre-process and apply various computational methods to.
 
