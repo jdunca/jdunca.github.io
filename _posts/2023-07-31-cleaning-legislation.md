@@ -90,7 +90,7 @@ The second step uses a 'for loop' to iterate over each version of legislation, t
 
 The code works as follows: The loop iterates over each file name in the `uk` data frame. This reads each line of the file referenced by `uk$text[i]` into a tibble (a modern version of a dataframe in R, provided by the `tidyverse` package). It then uses `dplyr::filter()`and several regular expressions to remove rows that meet the following conditions:
 - Empty rows.
-- Rows that start (as indicated by`^`) with patterns indicating editorial notation indicateing modifications or amendments (e.g. "s.12" or "Sch. 2").
+- Rows that start (as indicated by`^`) with patterns indicating editorial notation like modifications or amendments (e.g. "s.12" or "Sch. 2").
 - Rows that indicate text that has been repealed, which is indicated by a series of periods separated by spaces.
 - Rows that start with specific letter numbers followed by numbers (e.g., "C1", "I18", etc.).
 - Rows containing terms such as "Textual Amendments", "Modifications etc", that appear as headers in editorial notations.
