@@ -35,9 +35,9 @@ Despite discovering a really useful set of patterns in the text of the most rece
 
 ![Legislation screenshot]({% link assets/images/uk-imm-act-valid-from.png%})_This screenshot of the earliest piece of legislation in our series reveals additional editorial notes that we don't need._
 
-Looking at the published version from February 14th 2000 reveals additional editorial content that we need to remove. First, we see that amendments are referenced in the text using square brackets – this appears in all versions of the legislation but I'm noting it here because it appears in this screen shot. What isn't in the latest version is the box that shows future amendments. In this case we have a box that starts with "VALID FROM" followed by a date in DD/MM/YYYY format. It ends with the standard notation for the textual amendment we already identified. Another quick search using Ctrl-F shows that this pattern holds for all of these boxes.
+Looking at the published version from February 14th, 2000 reveals additional editorial content that we need to remove. First, we see that amendments are referenced in the text using square brackets – this appears in all versions of the legislation but I'm noting it here because it appears in this screenshot. What isn't in the latest version is the box that shows future amendments. In this case we have a box that starts with "VALID FROM" followed by a date in DD/MM/YYYY format. It ends with the standard notation for the textual amendment we already identified. Another quick search using Ctrl-F shows that this pattern holds for all of these boxes.
 
-These are some of the most important examples, but I spent a fair bit of time examining different versions of the legislation to identify these sorts of patterns and test them for consistency. The following section of this post will go over how I translated these patterns into a series of *regular expressions* to extract the parts of the UK's Immigration Act 1971 that I'm interested in and remove those that are not going to be helpful for my next stage of analysis. 
+These are some of the most important examples, but I spent a fair bit of time examining different versions of the legislation to identify these sorts of patterns and test them for consistency. The next section of this post will go over how I translated these patterns into a series of *regular expressions* to extract the parts of the UK's Immigration Act 1971 that I'm interested in and remove those that are not going to be helpful for my next stage of analysis. 
 # Using and applying regular expressions
 Regular expressions are patterns used to match character combinations in strings. They are crucial for cleaning textual data. My cleaning process for legislation scraped from the internet is broken into two stages. In the first step I use `dplyr::mutate()` and `stringr::str_remove_all()` to remove all text in each row of our data frame between "Valid from" and "Textual amendments". 
 
@@ -49,17 +49,17 @@ uk <- uk |>
 Let's break down the expression used:
 
 `"Valid from"` matches that exact sequence of characters. `[\\s\\S]` matches any character:    
-    - `\\s`: Matches any whitespace character, which includes spaces, tabs, and line breaks.
-    - `\\S`: Matches any non-whitespace character. By combining them within the square brackets `[...]`, we're basically creating a pattern that can match any character, be it whitespace or not.
+- `\\s`: Matches any whitespace character, which includes spaces, tabs, and line breaks.
+- `\\S`: Matches any non-whitespace character. By combining them within the square brackets `[...]`, we're basically creating a pattern that can match any character, be it whitespace or not.
 `+?` modifies the preceding pattern (`[\\s\\S]`).
-    - `+`: Matches one or more of the preceding element.
-    - `?`: Makes the `+` "lazy", meaning it will try to match as few characters as possible. Without the `?`, the `+` would be "greedy" and would try to match as many characters as possible.
+- `+`: Matches one or more of the preceding element.
+- `?`: Makes the `+` "lazy", meaning it will try to match as few characters as possible. Without the `?`, the `+` would be "greedy" and would try to match as many characters as possible.
 `(?=Textual Amendments)` is a positive lookahead assertion that matches the exact string inside of the brackets.
-    - `(?=...)`: This will look ahead to see if there's a match, but won't consume any characters. In this case, it's looking to see if "Textual Amendments" follows after the earlier matched sequence. If "Textual Amendments" does not follow, then the whole regular expression won't match.
+- `(?=...)`: This will look ahead to see if there's a match, but won't consume any characters. In this case, it's looking to see if "Textual Amendments" follows after the earlier matched sequence. If "Textual Amendments" does not follow, then the whole regular expression won't match.
 
 Basically, this regular expression will find and match the sequence "Valid from" followed by any number of characters (as few as possible) until it matches "Textual Amendments", without including "Textual Amendments" in the match itself.
 
-The second step uses a 'for loop' to iterate over each version of legislation, transforming each version into a tibble (a spreadsheet or table) with a row for every line in the text of the legislation.
+The second step uses a 'for loop' to iterate over each version of legislation, transforming each version into a tibble (a dataframe format used in `tidyverse`) with a row for every line in the text of the legislation.
 
 > Many experienced R programmers dislike 'for loops'. Their reservations are generally well founded. For loops are computationally inefficient and less legible than 'vectorized' approaches like `purrr::map()`, especially for more complex tasks. For our purposes the task is small and simple enough that a for loop is fine.
 {: .prompt-tip }
@@ -93,13 +93,13 @@ for(i in 1:length(uk$name)){ #for each file in the UK CSV
 }
 ```
 
-The code works as follows: The loop iterates over each file name in the `uk` data frame. This reads each line of the file referenced by `uk$text[i]` into a tibble (a modern version of a dataframe in R, provided by the `tidyverse` package). It then uses `dplyr::filter()`and several regular expressions to remove rows that meet the following conditions:
+The code works as follows: The loop iterates over each file name in the `uk` dataframe. This reads each line of the file referenced by `uk$text[i]` into a tibble. It then uses `dplyr::filter()`and several regular expressions to remove rows that meet the following conditions:
 - Rows that start with notations indicating amendments.
 - Rows with repeated periods, which indicate repealed text.
 - Rows that start with codes like "C12", "I5", etc.
 - Rows containing certain specific phrases, such as "Textual Amendments" and "Marginal Citations", which are standard headers for editorial notations.
 
-It then uses `dplyr::mutate()` to modify and remove specific text from the rows as well, in:
+It then uses `dplyr::mutate()` to modify and remove specific text from the rows as well (without deleting the entire row as above):
 - Removing patterns that point to footnotes or references, such as `[F1]` or `F1[`.
 - Replacing closing brackets (`]`) with spaces.
 - Removing certain patterns and abbreviations like "U.K.", which appears throughout the scraped content as a 'tag'.
@@ -107,12 +107,12 @@ It then uses `dplyr::mutate()` to modify and remove specific text from the rows 
 - Removing all numbers.
 - Removing the word "PART".
 - Replacing words starting with multiple capital letters (like "AExample") to start from the last capital letter (like "Example").
-- Using `str_squish` to collapse and remove any extra whitespace.
+- Using `str_squish()` to collapse and remove any extra whitespace.
 
-We then use `head(-2)` to remove the last two lines – extraneous formatting from the website and then filter again to remove any empty rows created by multiple line breaks in the legislation and in cases where we removed all the content in a row in the steps above. Finally,  we use `write_delim()` to put each row in the tibble into a line in a .txt file written to the local path in our original .csv file. The final part of our for loop prints the name of the file that has just been processed so if there is an error we can see which file caused the problem. 
+We then use `head(-2)` to remove the last two lines – extraneous formatting from the website and then filter again to remove any empty rows created by multiple line breaks in the original text and in cases where we removed all the content in a row in the steps above. Finally, we use `write_delim()` to put each row in the tibble into a line in a .txt file written to the local path in our original .csv file. The final part of our for loop prints the name of the file that has just been processed so if there is an error we can see which file caused the problem. 
 
 # Validating the outputs
-Now that we have applied our cleaning script to every version of the legislation, we should take steps to validate the process we used. In this case I used the `diffr` library to compare the text before and after applying this process.
+Now that we have applied our cleaning script to every version of the legislation, we should take steps to validate the process. In this case I used the `diffr` library to compare the text before and after applying this process.
 
 We start by create a subset of the versions we cleaned by filtering the the scraped text to versions after the year 2000 and then extracting the oldest and the most recent versions. Then we take the 'raw' text from our scrape and write two .txt files in a subdirectory I created called `data/validate`.
 
@@ -143,7 +143,7 @@ raw <- list.files('data/validate', pattern = "raw-uk", full.names = TRUE) |> sor
 clean <- uk_sub$name |> sort()
 ```
 
-Finally, we use a for loop to feed the raw and cleaned text of the oldest and newest versions of the UK Immigration Act to a function called `diffr`, which compares the two files and highlights differences between them by presenting them to us side-by-side in an .html file. "Diffing" is a common method used to demonstrate differences in computer code across different versions but it's a handy tool for these purposes too!
+Finally, we use a for loop to feed the raw and cleaned text of the oldest and newest versions of the UK Immigration Act to a function called `diffr`, which compares the two versions of each text and highlights differences between them by presenting them to us side-by-side in an .html file. "Diffing" is a common method used to view changes in computer code across different versions but it's a handy tool for these purposes too!
 
 ```R
 # Loop to compare and generate differences between the raw and cleaned files. 
@@ -154,13 +154,13 @@ diffr(raw[i], clean[i]) |> htmlwidgets::saveWidget('tmp.html', selfcontained = T
 file.rename("tmp.html", paste0("data/validate/html/", str_extract(raw[i], "(?<=validate/raw-).+(?=\\.txt)"),".html")) }
 ```
 
-The code used above fed us two .html files that we can open in a browser to manually verify that our function has removed the content we want gone without accidentally removing content we need.
+The code used above fed us two .html files that we can open in a web browser to manually verify that our function has removed the content we want gone without accidentally removing content we need.
 
 ![]({% link assets/images/dffr-screenshot.png%})
 _This screenshot shows what one of the diffr .html files looks like_
 
-We can open up the .html file in our browser and scroll through. As we can see in the screen shot above our cleaning has remove alot of extra white space as well as needless formatting, numbers and editorial notes. It takes a while to scroll through them but it's worth it as I caught several mistakes throughout my cleaning process this way. For this example, I am using the oldest and newest versions, which was my starting point. In practice, validation was an iterative process where I consulted several different versions, including those in the middle of the range throughout the cleaning process. This post is linear but the cleaning process was not! I validated my cleaning as I was writing the code, going back and forth several times to get the final result. 
+We can open up the .html file in our browser and scroll through. As we can see in the screen shot above our cleaning has removes a lot of extra white space as well as needless formatting, numbers and editorial notes. It takes a while to scroll through them but it's worth it as I caught several mistakes throughout my cleaning process. For this example, I am using the oldest and newest versions, which was my starting point. In practice, validation was an iterative process where I consulted several different versions (including those in the middle of the date range) throughout the cleaning process. 
 
-The final result is not perfect. The text will still need to be pre-processed before I can apply computational methods like topic models. Because different methods call for different pre-processing, this is a convenient way to store it for now.
+This post is linear but the cleaning process was not! I validated my cleaning as I was writing the code, going back and forth several times to get the final result. The final result is not perfect. The text will still need to be pre-processed before I can apply computational methods like topic models. Because different methods call for different pre-processing, this is a convenient way to store it for now.
 # Conclusion
 This is where I'll stop with part 2 of this series on analyzing how legislation evolves. Admittedly, this post was not a full service tutorial as you would have had to scrape the legislation or use the Canadian legislation scraped in part 1. But if you followed along, you should have a folder of .txt files containing the cleaned text of each version. You'll also have at least two .html files displaying the differences between the 'raw' and cleaned text. In future posts we will read these texts into a corpus that we can pre-process and apply various computational methods.
