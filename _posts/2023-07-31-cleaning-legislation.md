@@ -54,6 +54,7 @@ Let's break down the expression used:
 `+?` modifies the preceding pattern (`[\\s\\S]`).
 - `+`: Matches one or more of the preceding element.
 - `?`: Makes the `+` "lazy", meaning it will try to match as few characters as possible. Without the `?`, the `+` would be "greedy" and would try to match as many characters as possible.
+
 `(?=Textual Amendments)` is a positive lookahead assertion that matches the exact string inside of the brackets.
 - `(?=...)`: This will look ahead to see if there's a match, but won't consume any characters. In this case, it's looking to see if "Textual Amendments" follows after the earlier matched sequence. If "Textual Amendments" does not follow, then the whole regular expression won't match.
 
