@@ -26,8 +26,8 @@ What follows is a step-by-step guide to archiving ATIs (or whatever other docume
 
 I study borders and immigration. A while back I asked Immigration Refugees and Citizenship Canada (IRCC) for around 50 previously completed ATIs. These records will serve as the example in this guide. I have refined this method by archiving over 1500 documents from several other agencies that were obtained by me or my colleagues at the [Centre for Access to Information and Justice](https://www.uwinnipeg.ca/caij/). This guide presumes you have a folder of requests with the original file names. IRCC released their requests to me via email. I manually downloaded all the files and put them in my folder.
 
-  The code in this post its just what I have hacked together. There are almost certainly more efficient and elegant ways of achieving the same outcomes. If you make something better, please share it!
-  {: .prompt-warning}
+> The code in this post its just what I have hacked together. There are almost certainly more efficient and elegant ways of achieving the same outcomes. If you make something better, please share it!
+{: .prompt-warning}
 
 ## Clean names
 The first thing we'll want to do is standardize the file names. Documents typically (but not always) feature a request number (like A-2020-06759). This number is not always formatted the same way and the document titles often include other information we don't need. For example, IRCC's releases included the following titles:
@@ -175,15 +175,15 @@ The whole process can easily be done in Python. I'm more comfortable in R so I u
 - `% brew install internetarchive` – this requires the Homebrew package manager. If that means nothing to you just replace 'brew' with 'pip' and it should work.
 - `% ia configure` – it will ask you to log in with your IA credentials.
 
-  Note: I had the CLI tool installed already but needed to re-install it via R to make this process work. 
-  {: .prompt-info}
+> I had the CLI tool installed already but needed to re-install it via R to make this process work. 
+{: .prompt-info}
 
 I maintain a .csv file with a record of all the documents I've previously uploaded  to ensure that I'm not duplicating efforts (and straining IA's resources). The `anti_join()` simply removes rows that have previously been uploaded. If you haven't uploaded anything yet, you can skip this step initially but this file will be created when we upload.
 
 The most straightforward way to upload in bulk to the internet archive is to go to your terminal (I'm on a Mac) and run the command `% ia upload --spreadsheet=file.csv`. I switched to the for-loop written out below because IA's backend often gets overloaded and fails to upload files. When this happens there is no automatic way to identify which of the files successfully uploaded or not. You just have to re-upload the whole spreadsheet, which of course deepens the problem of overloading IA's infrastructure. 
 
-  If you are reading this and happen to have a lot of money, consider donating to the Internet Archive! 
-  {: .prompt-tip}
+> If you are reading this and happen to have a lot of money, consider donating to the Internet Archive! 
+ {: .prompt-tip}
 
 Our for loop addresses this problem by running each file independently. It iterates across each row in our 'upload' dataframe, writes that single row to a temporary .csv, and runs the `% ia upload` command. It uses the `--retries` flag to give each file 20 chances to successfully upload before moving on to the next file. Including`2>&1` in the command redirects error messages to the same 'stream' as the other outputs so we can capture them in one place. If the output includes "%100" we know that our upload was successful so we can add it to our log of successful uploads by appending it to `ia-uploaded.csv`, if not we have an error. This strategy allows us to keep track of successful uploads so if we run into any errors (almost guaranteed if you're uploading a lot of documents), we can just run the whole code chunk again and the anti-join will automatically remove files that were successfully uploaded from the queue. In the future, I'll wrap all of this in a while-loop so it just keeps iterating until all the files are uploaded.
 
